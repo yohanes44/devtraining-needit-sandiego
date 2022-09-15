@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_widget">
+    <sp_widget action="INSERT_OR_UPDATE">
+        <category>other</category>
+        <client_script><![CDATA[function ($scope, $animate, $rootScope) {
+  $scope.$watch("data.task", function() {
+    $scope.task = $scope.data.task; // copy for shortcuts above
+  })
+
+}]]></client_script>
+        <controller_as>c</controller_as>
+        <css>.pre-wrap {
+  white-space:pre-wrap;
+}
+
+.options {
+  display: inline-block;
+}</css>
+        <data_table>sp_instance</data_table>
+        <demo_data/>
+        <description/>
+        <docs/>
+        <field_list/>
+        <has_preview>false</has_preview>
+        <id/>
+        <internal>false</internal>
+        <link><![CDATA[function link(scope, element, attrs, controller) {  }]]></link>
+        <name>Copy of Approval Record JO</name>
+        <option_schema>[{"hint":"If true, the activity stream of the approval record will be shown. Else, the activity stream for the request record will be shown.","name":"use_approval_record_activity_stream","section":"Behavior","default_value":"false","label":"Use Approval Record Activity Stream","type":"boolean"}]</option_schema>
+        <public>false</public>
+        <roles/>
+        <script><![CDATA[(function() {
+	// g_approval_form_request is for approval summarizer ACLs
+	// that let user read a record they need to approve. This global
+	// variable is then deleted at the bottom of the script
+	g_approval_form_request = true;
+	var gr = $sp.getRecord();
+	if (gr == null || !gr.isValid()) {
+		data.isValid = false;
+		return;
+	}
+	if (gr.getValue("approver") != gs.getUserID())
+		data.approver = gr.approver.getDisplayValue();
+	data.isValid = true;
+	var task = getRecordBeingApproved(gr);
+	if (task == null) {
+		data.isValid = false;
+		return;
+	}
+
+	var t = {};
+	t = $sp.getFieldsObject(task, 'number,short_description,opened_by,requested_by,start_date,end_date,quantity,price,recurring_price,recurring_frequency');
+	t.table = task.getLabel();
+
+	var items = [];
+	var idx = 0;
+	var itemsGR = new GlideRecord("sc_req_item");
+	itemsGR.addQuery("request", task.sys_id);
+	itemsGR.query();
+	while (itemsGR.next()) {
+	  var item = {};
+	  item.short_description = itemsGR.short_description.toString();
+	  if (itemsGR.getValue("price") > 0)
+		  item.price = itemsGR.getDisplayValue("price");
+
+	  if (itemsGR.getValue("recurring_price") > 0) {
+		  item.recurring_price = itemsGR.getDisplayValue("recurring_price");
+			item.recurring_frequency = itemsGR.getDisplayValue("recurring_frequency");
+	  }
+
+	  if (itemsGR) {
+		  item.variables = new GlobalServiceCatalogUtil().getVariablesForTask(itemsGR, true);
+		  item.variableSummarizerWidget = $sp.getWidget('sc-variable-summarizer', {'variables' : item.variables, 'toggle' : false, 'task': t.number.value});
+		}
+	  items[idx] = item;
+	  idx++;
+	}
+
+	data.items = items;
+	data.sys_id = gr.getUniqueValue();
+	data.task = t;
+	if (task) {
+		data.variables = new GlobalServiceCatalogUtil().getVariablesForTask(task, true);
+		data.variableSummarizerWidget = $sp.getWidget('sc-variable-summarizer', {'variables' : data.variables, 'toggle' : true, 'task': t.number.value});
+	}
+
+	function getRecordBeingApproved(gr) {
+		var approvalTargetRecord;
+	  if (!gr.sysapproval.nil())
+			approvalTargetRecord = gr.sysapproval.getRefRecord();
+		else
+			approvalTargetRecord = gr.document_id.getRefRecord();
+
+		return (approvalTargetRecord.canRead()) ? approvalTargetRecord : null;
+	}
+
+	var ticketConversationOptions = {
+		placeholder: gs.getMessage("Type your message here..."),
+		placeholderNoEntries: gs.getMessage("Start a conversation..."),
+		btnLabel: gs.getMessage("Send")
+	};
+
+	if (options.use_approval_record_activity_stream === true ||
+			options.use_approval_record_activity_stream === "true") {
+		ticketConversationOptions.sys_id = gr.getUniqueValue();
+		ticketConversationOptions.table  = gr.getRecordClassName();
+		ticketConversationOptions.title  = gs.getMessage("Activity Stream for Approval");
+	} else {
+		ticketConversationOptions.sys_id = task.getUniqueValue();
+		ticketConversationOptions.table  = task.getRecordClassName();
+		ticketConversationOptions.title  = gs.getMessage("Activity Stream for {0}", task.getLabel());
+	}
+	data.ticketConversation = $sp.getWidget('widget-ticket-conversation', ticketConversationOptions);
+	delete g_approval_form_request;
+})();]]></script>
+        <servicenow>false</servicenow>
+        <sys_class_name>sp_widget</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2022-09-15 08:37:10</sys_created_on>
+        <sys_id>8dfaddc0978211103dc37cb0f053af37</sys_id>
+        <sys_name>Copy of Approval Record JO</sys_name>
+        <sys_package display_value="NeedIt" source="x_58872_needit">6ead8e780f603200cd674f8ce1050ed1</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="NeedIt">6ead8e780f603200cd674f8ce1050ed1</sys_scope>
+        <sys_update_name>sp_widget_8dfaddc0978211103dc37cb0f053af37</sys_update_name>
+        <template><![CDATA[<div ng-if="!data.isValid">
+  ${Record not found}
+</div>
+<div ng-if="data.isValid">
+<div class="panel panel-{{::options.color}} b">
+  <div class="panel-heading">
+    <h2 class="panel-title">${Approval request for {{::task.table}} {{::task.number.display_value}}}</h2>
+  </div>
+
+  <div class="panel-body">
+    <div ng-if="task.short_description">{{::task.short_description.display_value}}</div>
+    <div ng-if="task.opened_by"><label>${Opened by}</label> {{::task.opened_by.display_value}}</div>
+    <div ng-if="task.requested_by"><label>${Requestor}</label> {{::task.requested_by.display_value}}</div>
+    <div ng-if="::data.approver"><label>${Approver}</label> {{::data.approver}}</div>
+    <div ng-if="task.start_date"><label>${Start}</label> {{::task.start_date.display_value}}</div>
+    <div ng-if="task.end_date"><label>${End}</label> {{::task.end_date.display_value}}</div>
+    <div ng-if="task.quantity">${Quantity} {{::task.quantity.display_value}}</div>
+    <div ng-if="task.price.value > 0"><label>${Price}</label> {{::task.price.display_value}}
+      <span ng-if="task.recurring_frequency.value != null"><label>${Recurring price}</label> {{::task.recurring_price.display_value}} {{task.recurring_frequency.display_value}}</span>
+      <label ng-if="task.quantity && task.quantity.value > 1"> ${each}</label>
+    </div>
+
+    <div ng-if="data.items.length > 0">
+      <h3 class="h4">${Items in this Request}</h3>
+      <div ng-repeat="item in data.items">
+        <h4>
+          {{::item.short_description}}
+        </h4>
+        <div ng-if="item.price">${Price} {{::item.price}}
+          <span ng-if="item.recurring_price">${Recurring price} {{::item.recurring_price}} {{::item.recurring_frequency}}</span>
+        </div>
+        <sp-widget ng-if="item.variableSummarizerWidget" widget="item.variableSummarizerWidget"></sp-widget>
+
+      </div>
+    </div>
+
+    <sp-widget widget="data.variableSummarizerWidget"></sp-widget>
+</div>
+  <sp-widget widget="data.ticketConversation" />
+</div>]]></template>
+    </sp_widget>
+</record_update>

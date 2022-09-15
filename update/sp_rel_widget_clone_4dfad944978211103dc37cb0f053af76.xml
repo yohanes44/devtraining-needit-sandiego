@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_rel_widget_clone">
+    <sp_rel_widget_clone action="INSERT_OR_UPDATE">
+        <child display_value="Copy of Approval Record JO">8dfaddc0978211103dc37cb0f053af37</child>
+        <cloned>2022-09-15 08:37:10</cloned>
+        <last_validated>2022-09-15 08:37:10</last_validated>
+        <parent display_value="Approval Record">525a2752cb30020000f8d856634c9cfd</parent>
+        <payload>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;sp_widget&gt;&lt;category&gt;other&lt;/category&gt;&lt;client_script&gt;&lt;![CDATA[function ($scope, $animate, $rootScope) {
+  $scope.$watch("data.task", function() {
+    $scope.task = $scope.data.task; // copy for shortcuts above
+  })
+
+}]]&gt;&lt;/client_script&gt;&lt;controller_as/&gt;&lt;css&gt;.pre-wrap {
+  white-space:pre-wrap;
+}
+
+.options {
+  display: inline-block;
+}&lt;/css&gt;&lt;data_table&gt;sp_instance&lt;/data_table&gt;&lt;demo_data/&gt;&lt;description/&gt;&lt;docs/&gt;&lt;field_list/&gt;&lt;has_preview&gt;false&lt;/has_preview&gt;&lt;id/&gt;&lt;internal&gt;false&lt;/internal&gt;&lt;link/&gt;&lt;name&gt;Approval Record&lt;/name&gt;&lt;option_schema&gt;[{"hint":"If true, the activity stream of the approval record will be shown. Else, the activity stream for the request record will be shown.","name":"use_approval_record_activity_stream","section":"Behavior","default_value":"false","label":"Use Approval Record Activity Stream","type":"boolean"}]&lt;/option_schema&gt;&lt;public&gt;false&lt;/public&gt;&lt;roles/&gt;&lt;script&gt;&lt;![CDATA[(function() {
+	// g_approval_form_request is for approval summarizer ACLs
+	// that let user read a record they need to approve. This global
+	// variable is then deleted at the bottom of the script
+	g_approval_form_request = true;
+	var gr = $sp.getRecord();
+	if (gr == null || !gr.isValid()) {
+		data.isValid = false;
+		return;
+	}
+	if (gr.getValue("approver") != gs.getUserID())
+		data.approver = gr.approver.getDisplayValue();
+	data.isValid = true;
+	var task = getRecordBeingApproved(gr);
+	if (task == null) {
+		data.isValid = false;
+		return;
+	}
+
+	var t = {};
+	t = $sp.getFieldsObject(task, 'number,short_description,opened_by,requested_by,start_date,end_date,quantity,price,recurring_price,recurring_frequency');
+	t.table = task.getLabel();
+
+	var items = [];
+	var idx = 0;
+	var itemsGR = new GlideRecord("sc_req_item");
+	itemsGR.addQuery("request", task.sys_id);
+	itemsGR.query();
+	while (itemsGR.next()) {
+	  var item = {};
+	  item.short_description = itemsGR.short_description.toString();
+	  if (itemsGR.getValue("price") &gt; 0)
+		  item.price = itemsGR.getDisplayValue("price");
+
+	  if (itemsGR.getValue("recurring_price") &gt; 0) {
+		  item.recurring_price = itemsGR.getDisplayValue("recurring_price");
+			item.recurring_frequency = itemsGR.getDisplayValue("recurring_frequency");
+	  }
+
+	  if (itemsGR) {
+		  item.variables = new GlobalServiceCatalogUtil().getVariablesForTask(itemsGR, true);
+		  item.variableSummarizerWidget = $sp.getWidget('sc-variable-summarizer', {'variables' : item.variables, 'toggle' : false, 'task': t.number.value});
+		}
+	  items[idx] = item;
+	  idx++;
+	}
+
+	data.items = items;
+	data.sys_id = gr.getUniqueValue();
+	data.task = t;
+	if (task) {
+		data.variables = new GlobalServiceCatalogUtil().getVariablesForTask(task, true);
+		data.variableSummarizerWidget = $sp.getWidget('sc-variable-summarizer', {'variables' : data.variables, 'toggle' : true, 'task': t.number.value});
+	}
+
+	function getRecordBeingApproved(gr) {
+		var approvalTargetRecord;
+	  if (!gr.sysapproval.nil())
+			approvalTargetRecord = gr.sysapproval.getRefRecord();
+		else
+			approvalTargetRecord = gr.document_id.getRefRecord();
+
+		return (approvalTargetRecord.canRead()) ? approvalTargetRecord : null;
+	}
+
+	var ticketConversationOptions = {
+		placeholder: gs.getMessage("Type your message here..."),
+		placeholderNoEntries: gs.getMessage("Start a conversation..."),
+		btnLabel: gs.getMessage("Send")
+	};
+
+	if (options.use_approval_record_activity_stream === true ||
+			options.use_approval_record_activity_stream === "true") {
+		ticketConversationOptions.sys_id = gr.getUniqueValue();
+		ticketConversationOptions.table  = gr.getRecordClassName();
+		ticketConversationOptions.title  = gs.getMessage("Activity Stream for Approval");
+	} else {
+		ticketConversationOptions.sys_id = task.getUniqueValue();
+		ticketConversationOptions.table  = task.getRecordClassName();
+		ticketConversationOptions.title  = gs.getMessage("Activity Stream for {0}", task.getLabel());
+	}
+	data.ticketConversation = $sp.getWidget('widget-ticket-conversation', ticketConversationOptions);
+	delete g_approval_form_request;
+})();]]&gt;&lt;/script&gt;&lt;servicenow&gt;true&lt;/servicenow&gt;&lt;sys_class_name&gt;sp_widget&lt;/sys_class_name&gt;&lt;sys_created_by&gt;admin&lt;/sys_created_by&gt;&lt;sys_created_on&gt;2015-06-24 17:22:11&lt;/sys_created_on&gt;&lt;sys_id&gt;525a2752cb30020000f8d856634c9cfd&lt;/sys_id&gt;&lt;sys_mod_count&gt;144&lt;/sys_mod_count&gt;&lt;sys_name&gt;Approval Record&lt;/sys_name&gt;&lt;sys_package display_value="Service Portal - Core" source="com.glide.service-portal"&gt;d987abb375f011108c8b143dd0c59f7e&lt;/sys_package&gt;&lt;sys_policy/&gt;&lt;sys_scope display_value="Global"&gt;global&lt;/sys_scope&gt;&lt;sys_update_name&gt;sp_widget_525a2752cb30020000f8d856634c9cfd&lt;/sys_update_name&gt;&lt;sys_updated_by&gt;admin&lt;/sys_updated_by&gt;&lt;sys_updated_on&gt;2020-04-16 03:32:16&lt;/sys_updated_on&gt;&lt;template&gt;&lt;![CDATA[&lt;div ng-if="!data.isValid"&gt;
+  ${Record not found}
+&lt;/div&gt;
+&lt;div ng-if="data.isValid"&gt;
+&lt;div class="panel panel-{{::options.color}} b"&gt;
+  &lt;div class="panel-heading"&gt;
+    &lt;h2 class="panel-title"&gt;${Approval request for {{::task.table}} {{::task.number.display_value}}}&lt;/h2&gt;
+  &lt;/div&gt;
+
+  &lt;div class="panel-body"&gt;
+    &lt;div ng-if="task.short_description"&gt;{{::task.short_description.display_value}}&lt;/div&gt;
+    &lt;div ng-if="task.opened_by"&gt;&lt;label&gt;${Opened by}&lt;/label&gt; {{::task.opened_by.display_value}}&lt;/div&gt;
+    &lt;div ng-if="task.requested_by"&gt;&lt;label&gt;${Requestor}&lt;/label&gt; {{::task.requested_by.display_value}}&lt;/div&gt;
+    &lt;div ng-if="::data.approver"&gt;&lt;label&gt;${Approver}&lt;/label&gt; {{::data.approver}}&lt;/div&gt;
+    &lt;div ng-if="task.start_date"&gt;&lt;label&gt;${Start}&lt;/label&gt; {{::task.start_date.display_value}}&lt;/div&gt;
+    &lt;div ng-if="task.end_date"&gt;&lt;label&gt;${End}&lt;/label&gt; {{::task.end_date.display_value}}&lt;/div&gt;
+    &lt;div ng-if="task.quantity"&gt;${Quantity} {{::task.quantity.display_value}}&lt;/div&gt;
+    &lt;div ng-if="task.price.value &gt; 0"&gt;&lt;label&gt;${Price}&lt;/label&gt; {{::task.price.display_value}}
+      &lt;span ng-if="task.recurring_frequency.value != null"&gt;&lt;label&gt;${Recurring price}&lt;/label&gt; {{::task.recurring_price.display_value}} {{task.recurring_frequency.display_value}}&lt;/span&gt;
+      &lt;label ng-if="task.quantity &amp;&amp; task.quantity.value &gt; 1"&gt; ${each}&lt;/label&gt;
+    &lt;/div&gt;
+
+    &lt;div ng-if="data.items.length &gt; 0"&gt;
+      &lt;h3 class="h4"&gt;${Items in this Request}&lt;/h3&gt;
+      &lt;div ng-repeat="item in data.items"&gt;
+        &lt;h4&gt;
+          {{::item.short_description}}
+        &lt;/h4&gt;
+        &lt;div ng-if="item.price"&gt;${Price} {{::item.price}}
+          &lt;span ng-if="item.recurring_price"&gt;${Recurring price} {{::item.recurring_price}} {{::item.recurring_frequency}}&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;sp-widget ng-if="item.variableSummarizerWidget" widget="item.variableSummarizerWidget"&gt;&lt;/sp-widget&gt;
+
+      &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;sp-widget widget="data.variableSummarizerWidget"&gt;&lt;/sp-widget&gt;
+&lt;/div&gt;
+  &lt;sp-widget widget="data.ticketConversation" /&gt;
+&lt;/div&gt;]]&gt;&lt;/template&gt;&lt;/sp_widget&gt;</payload>
+        <sys_class_name>sp_rel_widget_clone</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2022-09-15 08:37:10</sys_created_on>
+        <sys_id>4dfad944978211103dc37cb0f053af76</sys_id>
+        <sys_name>8dfaddc0978211103dc37cb0f053af37</sys_name>
+        <sys_package display_value="NeedIt" source="x_58872_needit">6ead8e780f603200cd674f8ce1050ed1</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="NeedIt">6ead8e780f603200cd674f8ce1050ed1</sys_scope>
+        <sys_update_name>sp_rel_widget_clone_4dfad944978211103dc37cb0f053af76</sys_update_name>
+    </sp_rel_widget_clone>
+</record_update>
