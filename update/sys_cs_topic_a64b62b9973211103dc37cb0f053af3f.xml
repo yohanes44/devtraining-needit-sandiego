@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_cs_topic">
+    <sys_cs_topic action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <applicability>true</applicability>
+        <autopilot_topic>false</autopilot_topic>
+        <cb_topic_id display_value="Incident Help">339aaaf5973211103dc37cb0f053afc2</cb_topic_id>
+        <channels/>
+        <definition>{"id":"339aaaf5973211103dc37cb0f053afc2","name":"Incident Help","system_topic":false,"autopilot_topic":false,"vendor_id":"c2f0b8f187033200246ddd4c97cb0bb9","description":"Incident Help","applicability":"true","categories":[],"key_phrases":["Incident Help","incident","create Incident","problem","fix problem","delete incident","update incident","need hep"],"variables":[{"name":"LiveAgent_application","type":"java.lang.Object"},{"name":"__segment_trigger_966df5b081254acba096e5ff8f801f88_done","type":"java.lang.Object","init_value":"false"},{"name":"previous_graph_node","type":"java.lang.Object"}],"fields":[{"type":"Reference","table_name":"sys_user","name":"user","unique":false,"key_phrases":[],"mask_type":"NONE","list":false,"static_enum_list":[]},{"type":"Boolean","name":"RootDecisionBranch_264b62b9aa32111059cffd40e766483e","unique":false,"default_value":"true","key_phrases":[],"mask_type":"NONE","list":false,"static_enum_list":[]},{"type":"String","name":"__silent_Branch_RootDecisionBranch_e24b62b9b23211103801f723600c223e","unique":false,"key_phrases":[],"mask_type":"NONE","list":false,"static_enum_list":[],"encrypt_if_secure":true},{"type":"String","name":"__silent_TerminateGoal_22c145b7807446178a30ffac95c4238f","unique":false,"key_phrases":[],"mask_type":"NONE","list":false,"static_enum_list":[],"encrypt_if_secure":true},{"type":"String","name":"__silent_Decision_RootDecision_a24b62b998321110449375c3cbdabc3e","unique":false,"key_phrases":[],"mask_type":"NONE","list":false,"static_enum_list":[],"encrypt_if_secure":true},{"type":"String","name":"__silent_StartGoal_93ea9c4149534e7eaaade4c500798b26","unique":false,"key_phrases":[],"mask_type":"NONE","list":false,"static_enum_list":[],"encrypt_if_secure":true}],"actions":[],"tasks":[{"type":"Consumer to system","show_as_button":true,"name":"primary","description":"primary","applicability":"vaVars.__segment_trigger_966df5b081254acba096e5ff8f801f88_done==false &amp;&amp; true","mode":"Qmode","key_phrases":[],"greeting_msg":"vaInputs.initialize(\"user\");vaInputs.initialize(\"RootDecisionBranch_264b62b9aa32111059cffd40e766483e\");vaInputs.initialize(\"__silent_TerminateGoal_22c145b7807446178a30ffac95c4238f\");vaInputs.initialize(\"__silent_Branch_RootDecisionBranch_e24b62b9b23211103801f723600c223e\");vaInputs.initialize(\"__silent_Decision_RootDecision_a24b62b998321110449375c3cbdabc3e\");vaInputs.initialize(\"__silent_StartGoal_93ea9c4149534e7eaaade4c500798b26\");null;","fields":[{"name":"__silent_Decision_RootDecision_a24b62b998321110449375c3cbdabc3e","direction":"Input","required":true,"prompt_msg":"vaVars.previous_graph_node=\"RootDecision_for_goal_primary___RootDecision_a24b62b998321110449375c3cbdabc3e\";vaInputs.__silent_Decision_RootDecision_a24b62b998321110449375c3cbdabc3e=true;null;","confirm_msg_on_default_value":{"msg":"","val_for_confirm":true},"nlu_text_input":false,"nlu_confirmation_prompt":false,"acknowledge_msg":"vaVars.previous_graph_node=\"RootDecision_for_goal_primary___RootDecision_a24b62b998321110449375c3cbdabc3e\";var ackMsg=null;ackMsg=null;vaInputs.RootDecisionBranch_264b62b9aa32111059cffd40e766483e=true;ackMsg;"},{"name":"__silent_Branch_RootDecisionBranch_e24b62b9b23211103801f723600c223e","applicable":"vaVars.previous_graph_node==\"RootDecision_for_goal_primary___RootDecision_a24b62b998321110449375c3cbdabc3e\" &amp;&amp; ((vaInputs.RootDecisionBranch_264b62b9aa32111059cffd40e766483e.getValue() == true))","direction":"Input","required":true,"prompt_msg":"vaVars.previous_graph_node=\"RootDecisionBranch_e24b62b9b23211103801f723600c223e___RootDecisionBranch_e24b62b9b23211103801f723600c223e\";vaInputs.__silent_Branch_RootDecisionBranch_e24b62b9b23211103801f723600c223e=true;null;","confirm_msg_on_default_value":{"msg":"","val_for_confirm":true},"nlu_text_input":false,"nlu_confirmation_prompt":false,"acknowledge_msg":"vaVars.previous_graph_node=\"RootDecisionBranch_e24b62b9b23211103801f723600c223e___RootDecisionBranch_e24b62b9b23211103801f723600c223e\";var ackMsg=null;ackMsg=null;ackMsg;"},{"name":"__silent_StartGoal_93ea9c4149534e7eaaade4c500798b26","applicable":"vaVars.previous_graph_node==\"RootDecisionBranch_e24b62b9b23211103801f723600c223e___RootDecisionBranch_e24b62b9b23211103801f723600c223e\"","direction":"Input","required":true,"prompt_msg":"vaVars.previous_graph_node=\"Start___93ea9c4149534e7eaaade4c500798b26\";vaInputs.__silent_StartGoal_93ea9c4149534e7eaaade4c500798b26=true;null;","confirm_msg_on_default_value":{"msg":"","val_for_confirm":true},"nlu_text_input":false,"nlu_confirmation_prompt":false,"acknowledge_msg":"vaVars.previous_graph_node=\"Start___93ea9c4149534e7eaaade4c500798b26\";var ackMsg=null;ackMsg=null;ackMsg;"},{"name":"__silent_TerminateGoal_22c145b7807446178a30ffac95c4238f","applicable":"vaVars.previous_graph_node==\"Start___93ea9c4149534e7eaaade4c500798b26\"","direction":"Input","required":true,"prompt_msg":"vaVars.previous_graph_node=\"End___22c145b7807446178a30ffac95c4238f\";vaInputs.__silent_TerminateGoal_22c145b7807446178a30ffac95c4238f=true;null;","confirm_msg_on_default_value":{"msg":"","val_for_confirm":true},"nlu_text_input":false,"nlu_confirmation_prompt":false,"acknowledge_msg":"vaVars.previous_graph_node=\"End___22c145b7807446178a30ffac95c4238f\";var ackMsg=null;ackMsg=null;vaVars.__segment_trigger_966df5b081254acba096e5ff8f801f88_done=true;ackMsg;"}],"variables_update":[]}],"roles":[],"active":true,"published":true,"library":false,"expose_on_palette":false,"palette_label":"","flexible_conversation_switching":false,"design_categories":[{"name":"Cloud VMs","visible":false,"sysId":"94ab5e30c39320108940d2bf6d40dd45"},{"name":"ITSM Actionable Notifications","visible":false,"sysId":"5ca81c5a7331201083c1e0dbc4f6a7f8"},{"name":"ITSM Fulfiller","visible":false,"sysId":"bfdd66da0b203300a1b16c2367673a1f"},{"name":"ITSM IT Issues","visible":false,"sysId":"140e2eda0b203300a1b16c2367673af4"},{"name":"ITSM Self Service","visible":false,"sysId":"3efd22da0b203300a1b16c2367673a10"}],"nlu_provider":"","nlu_model":"","nlu_intent":"","topic_type":"STANDARD","channels":[],"triggerable_by_notification":false,"secure_custom_input_control":false,"score":0.0,"visible":true,"discoverable":true,"sys_scope":"6ead8e780f603200cd674f8ce1050ed1","sys_domain":"global","title":"Incident Help","nlu_intent_label":"","nlu_model_label":""}</definition>
+        <design_category>94ab5e30c39320108940d2bf6d40dd45,5ca81c5a7331201083c1e0dbc4f6a7f8,bfdd66da0b203300a1b16c2367673a1f,140e2eda0b203300a1b16c2367673af4,3efd22da0b203300a1b16c2367673a10</design_category>
+        <discoverable>true</discoverable>
+        <expose_on_palette>false</expose_on_palette>
+        <fields/>
+        <flexible_conversation_switching>false</flexible_conversation_switching>
+        <is_system_topic>false</is_system_topic>
+        <key_phrases>Incident Help incident create Incident problem fix problem delete incident update incident need hep</key_phrases>
+        <last_published_on>2022-10-28 07:44:38</last_published_on>
+        <library>false</library>
+        <library_usage>null</library_usage>
+        <metaphone/>
+        <name>Incident Help</name>
+        <nlu_intent/>
+        <nlu_intent_label/>
+        <nlu_model/>
+        <nlu_model_label/>
+        <nlu_provider/>
+        <palette_label/>
+        <published>true</published>
+        <roles/>
+        <secure_custom_input_control>false</secure_custom_input_control>
+        <sys_class_name>sys_cs_topic</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2022-10-28 07:44:38</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_id>a64b62b9973211103dc37cb0f053af3f</sys_id>
+        <sys_name>Incident Help</sys_name>
+        <sys_package display_value="NeedIt" source="x_58872_needit">6ead8e780f603200cd674f8ce1050ed1</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="NeedIt">6ead8e780f603200cd674f8ce1050ed1</sys_scope>
+        <sys_update_name>sys_cs_topic_a64b62b9973211103dc37cb0f053af3f</sys_update_name>
+        <title>Incident Help</title>
+        <triggerable_by_notification>false</triggerable_by_notification>
+        <type>STANDARD</type>
+        <vendor display_value="ServiceNow">c2f0b8f187033200246ddd4c97cb0bb9</vendor>
+        <visible>true</visible>
+    </sys_cs_topic>
+    <sys_variable_value action="delete_multiple" query="document_key=a64b62b9973211103dc37cb0f053af3f"/>
+</record_update>
